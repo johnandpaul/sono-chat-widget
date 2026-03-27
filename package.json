@@ -1,0 +1,11 @@
+{
+  "name": "sono-chat-widget",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "esbuild src/widget.js --bundle --minify --outfile=dist/widget.js --format=iife --global-name=SonoWidget",
+    "build:dev": "esbuild src/widget.js --bundle --outfile=dist/widget.js --format=iife --global-name=SonoWidget --sourcemap"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}
