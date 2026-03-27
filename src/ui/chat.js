@@ -78,7 +78,7 @@ export function initChat(config, shell) {
       Object.assign(bookingData, data.booking_data);
     }
 
-    appendMessage(data.reply, 'bot');
+    appendMessage(data.reply || data.response, 'bot');
 
     currentUiAction = data.ui_action;
     document.dispatchEvent(new CustomEvent('sw:uiaction', {
