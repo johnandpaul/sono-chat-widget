@@ -14,10 +14,21 @@ export function initChat(config, shell) {
 
   bookingData = {};
 
+  function renderMarkdown(text) {
+    if (!text) return '';
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  }
+
   function appendMessage(text, role) {
     const div = document.createElement('div');
     div.className = 'sw-msg ' + (role === 'user' ? 'sw-user' : 'sw-bot');
-    div.textContent = text;
+    div.innerHTML = renderMarkdown(text);
     shell.messagesEl.appendChild(div);
     shell.messagesEl.scrollTop = shell.messagesEl.scrollHeight;
   }
