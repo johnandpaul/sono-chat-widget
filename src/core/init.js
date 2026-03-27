@@ -5,6 +5,7 @@ import { sendMessage } from '../ui/chat.js';
 import { initInputControls } from '../ui/input.js';
 import { initAddressHandler } from '../features/address.js';
 import { initPhotoUpload } from '../features/photo.js';
+import { initCalendar } from '../features/calendar.js';
 
 export async function init() {
   await loadConfig();
@@ -18,5 +19,7 @@ export async function init() {
   console.log('SonoWidget: address handler ready');
   initPhotoUpload(config, shell, sendMessage);
   console.log('SonoWidget: photo upload ready');
+  initCalendar(config, shell, sendMessage);
+  console.log('SonoWidget: calendar ready');
   console.log('SonoWidget: ready');
 }
