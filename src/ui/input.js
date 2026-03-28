@@ -1,6 +1,6 @@
 export function initInputControls(config, shell, sendMessageFn) {
   const disableSteps = config.widget_config?.disable_input_during_steps || [];
-  const quickRepliesEnabled = config.widget_config?.quick_replies_enabled || false;
+  const quickRepliesEnabled = config.widget_config?.opening_quick_replies?.enabled || false;
   const primaryColor = config.widget_config?.primary_color || '#2563eb';
 
   function setInputEnabled(enabled) {
