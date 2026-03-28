@@ -93,7 +93,7 @@ export function initChat(config, shell) {
 
     currentUiAction = data.ui_action;
     document.dispatchEvent(new CustomEvent('sw:uiaction', {
-      detail: { action: data.ui_action, bookingData, quick_replies: data.quick_replies || [] },
+      detail: { action: data.ui_action, bookingData, quick_replies: data.quick_replies || [], slots: data.metadata?.slots || [] },
     }));
   };
 

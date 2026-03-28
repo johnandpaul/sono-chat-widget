@@ -171,6 +171,9 @@ export function initCalendar(config, shell, sendMessageFn) {
         inputRow.parentNode.insertBefore(container, inputRow);
       }
 
+      const timeslots = document.getElementById('sw-timeslots');
+      if (timeslots) timeslots.style.display = 'none';
+
       container.innerHTML = '';
       container.style.display = 'block';
       container.style.padding = '8px 16px';
@@ -180,9 +183,73 @@ export function initCalendar(config, shell, sendMessageFn) {
       displayMonth = now.getMonth();
 
       renderCalendar(container);
+    } else if (event.detail.action === 'show_timeslots') {
+      const calendar = document.getElementById('sw-calendar');
+      if (calendar) calendar.style.display = 'none';
+
+      const slots = event.detail.slots || [];
+      const inputRow = shell.inputEl.closest('.sw-input-row');
+
+      let container = document.getElementById('sw-timeslots');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'sw-timeslots';
+        inputRow.parentNode.insertBefore(container, inputRow);
+      }
+
+      container.innerHTML = '';
+      container.style.display = 'block';
+      container.style.padding = '8px 16px';
+
+      if (slots.length === 0) {
+        const msg = document.createElement('p');
+        msg.textContent = 'No times available for this date.';
+        msg.style.fontSize = '13px';
+        msg.style.color = '#6b7280';
+        msg.style.margin = '0';
+        container.appendChild(msg);
+        return;
+      }
+
+      const grid = document.createElement('div');
+      grid.style.display = 'flex';
+      grid.style.flexWrap = 'wrap';
+      grid.style.gap = '8px';
+
+      for (const slot of slots) {
+        const btn = document.createElement('button');
+        btn.textContent = slot.label;
+        btn.style.padding = '8px 16px';
+        btn.style.borderRadius = '8px';
+        btn.style.border = '1px solid';
+        btn.style.fontSize = '13px';
+        btn.style.cursor = slot.available ? 'pointer' : 'not-allowed';
+        btn.style.fontWeight = '500';
+        btn.disabled = !slot.available;
+
+        if (slot.available) {
+          btn.style.background = 'white';
+          btn.style.color = '#111827';
+          btn.style.borderColor = '#d1d5db';
+          btn.addEventListener('click', () => {
+            container.style.display = 'none';
+            sendMessageFn(slot.label, { source: 'timeslot', time: slot.start });
+          });
+        } else {
+          btn.style.background = '#f3f4f6';
+          btn.style.color = '#9ca3af';
+          btn.style.borderColor = '#e5e7eb';
+        }
+
+        grid.appendChild(btn);
+      }
+
+      container.appendChild(grid);
     } else {
-      const container = document.getElementById('sw-calendar');
-      if (container) container.style.display = 'none';
+      const calendar = document.getElementById('sw-calendar');
+      if (calendar) calendar.style.display = 'none';
+      const timeslots = document.getElementById('sw-timeslots');
+      if (timeslots) timeslots.style.display = 'none';
     }
   });
 }
