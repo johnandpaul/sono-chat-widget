@@ -126,6 +126,7 @@ export function buildShell(config) {
     }
     .sw-send:hover { filter: brightness(1.1); transform: scale(1.05); }
     .sw-send:disabled { background: #d1d5db; cursor: not-allowed; transform: none; }
+    .pac-container { z-index: 99999 !important; }
   `;
   document.head.appendChild(style);
 
