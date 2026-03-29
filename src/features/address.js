@@ -35,7 +35,7 @@ export function initAddressHandler(config, shell, sendMessageFn) {
       addressInput.style.fontSize = '14px';
       addressInput.style.outline = 'none';
 
-      if (window._sonoMapsReady === true && window.google?.maps?.places) {
+      if (window.google?.maps?.places) {
         const autocomplete = new google.maps.places.Autocomplete(addressInput, {
           types: ['address'],
           componentRestrictions: { country: 'us' },
