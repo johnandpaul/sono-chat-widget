@@ -2,7 +2,7 @@ export function initAddressHandler(config, shell, sendMessageFn) {
   const primaryColor = config.widget_config?.primary_color || '#2563eb';
 
   document.addEventListener('sw:uiaction', (event) => {
-    if (event.detail.action === 'confirm_address') {
+    if (event.detail.action === 'confirm_address' || event.detail.action === 'show_address') {
       const inputRow = shell.inputEl.closest('.sw-input-row');
       let container = document.getElementById('sw-address-confirm');
 
