@@ -9,6 +9,16 @@ import { initCalendar } from '../features/calendar.js';
 
 export async function init() {
   await loadConfig();
+
+  // Inject Google Maps SDK if configured
+  if (config.widget_config?.maps_enabled && config.widget_config?.maps_api_key) {
+    window._sonoMapsReady = false;
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${config.widget_config.maps_api_key}&libraries=places`;
+    script.onload = () => { window._sonoMapsReady = true; };
+    document.head.appendChild(script);
+  }
+
   const shell = buildShell(config);
   console.log('SonoWidget: shell built');
   initChat(config, shell);

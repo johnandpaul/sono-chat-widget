@@ -35,6 +35,27 @@ export function initAddressHandler(config, shell, sendMessageFn) {
       addressInput.style.fontSize = '14px';
       addressInput.style.outline = 'none';
 
+      if (window._sonoMapsReady === true && window.google?.maps?.places) {
+        const autocomplete = new google.maps.places.Autocomplete(addressInput, {
+          types: ['address'],
+          componentRestrictions: { country: 'us' },
+        });
+        autocomplete.addListener('place_changed', () => {
+          const result = autocomplete.getPlace();
+          const get = (type, nameType = 'long_name') =>
+            result.address_components?.find(c => c.types.includes(type))?.[nameType] || '';
+          const street_number = get('street_number');
+          const route = get('route');
+          const city = get('locality');
+          const state = get('administrative_area_level_1', 'short_name');
+          const zip = get('postal_code');
+          addressInput.value = `${street_number} ${route}, ${city}, ${state} ${zip}`;
+          addressInput.dataset.city = city;
+          addressInput.dataset.state = state;
+          addressInput.dataset.zip = zip;
+        });
+      }
+
       const confirmBtn = document.createElement('button');
       confirmBtn.textContent = 'Confirm Address';
       confirmBtn.style.marginTop = '8px';
@@ -55,10 +76,14 @@ export function initAddressHandler(config, shell, sendMessageFn) {
           return;
         }
 
-        const zipMatch = addressValue.match(/\b(\d{5})\b/);
         const contextObj = { address: addressValue, source: 'address_confirm' };
-        if (zipMatch) {
-          contextObj.zip = zipMatch[1];
+        if (addressInput.dataset.zip) {
+          contextObj.zip = addressInput.dataset.zip;
+          contextObj.city = addressInput.dataset.city;
+          contextObj.state = addressInput.dataset.state;
+        } else {
+          const zipMatch = addressValue.match(/\b(\d{5})\b/);
+          if (zipMatch) contextObj.zip = zipMatch[1];
         }
 
         sendMessageFn(addressValue, contextObj);
