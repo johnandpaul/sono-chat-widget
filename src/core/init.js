@@ -1,4 +1,4 @@
-import { config, loadConfig } from './config.js';
+import { config, loadConfig, applyConfig } from './config.js';
 import { buildShell } from '../ui/shell.js';
 import { initChat } from '../ui/chat.js';
 import { sendMessage } from '../ui/chat.js';
@@ -8,16 +8,7 @@ import { initPhotoUpload } from '../features/photo.js';
 import { initCalendar } from '../features/calendar.js';
 
 export async function init() {
-  await loadConfig();
-
-  // Inject Google Maps SDK if configured
-  if (config.widget_config?.maps_enabled && config.widget_config?.maps_api_key) {
-    window._sonoMapsReady = false;
-    const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${config.widget_config.maps_api_key}&libraries=places`;
-    script.onload = () => { window._sonoMapsReady = true; };
-    document.head.appendChild(script);
-  }
+  const configPromise = loadConfig();
 
   const shell = buildShell(config);
   console.log('SonoWidget: shell built');
@@ -71,4 +62,28 @@ export async function init() {
 
   console.log('SonoWidget: opening quick replies ready');
   console.log('SonoWidget: ready');
+
+  await configPromise;
+
+  // Inject Google Maps SDK if configured
+  if (config.widget_config?.maps_enabled && config.widget_config?.maps_api_key) {
+    window._sonoMapsReady = false;
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${config.widget_config.maps_api_key}&libraries=places`;
+    script.onload = () => { window._sonoMapsReady = true; };
+    document.head.appendChild(script);
+  }
+
+  // Patch live DOM with fresh config values
+  const freshColor = config.widget_config?.primary_color;
+  const freshGreeting = config.widget_config?.greeting_message;
+
+  if (freshGreeting) {
+    const greetingEl = document.getElementById('sw-greeting');
+    if (greetingEl) greetingEl.textContent = freshGreeting;
+  }
+
+  if (freshColor) {
+    shell.bubble.style.background = `linear-gradient(135deg, ${freshColor} 0%, ${freshColor} 100%)`;
+  }
 }

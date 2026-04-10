@@ -187,6 +187,7 @@ export function buildShell(config) {
   // Greeting message
   const greeting = document.createElement('div');
   greeting.className = 'sw-msg sw-bot';
+  greeting.id = 'sw-greeting';
   greeting.textContent = greetingMessage;
   messagesEl.appendChild(greeting);
 
@@ -224,5 +225,5 @@ export function buildShell(config) {
     panel.classList.remove('sw-open');
   });
 
-  return { panel, messagesEl, inputEl, sendBtn };
+  return { panel, header, bubble, messagesEl, inputEl, sendBtn };
 }
