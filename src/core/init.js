@@ -86,4 +86,15 @@ export async function init() {
   if (freshColor) {
     shell.bubble.style.background = `linear-gradient(135deg, ${freshColor} 0%, ${freshColor} 100%)`;
   }
+
+  // Wire up .chat-trigger-dynamic buttons throughout the host page
+  document.querySelectorAll('.chat-trigger-dynamic').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const prompt = this.getAttribute('data-prompt') || '';
+      shell.panel.classList.add('sw-open');
+      if (prompt) {
+        setTimeout(() => sendMessage(prompt, {}), 400);
+      }
+    });
+  });
 }
