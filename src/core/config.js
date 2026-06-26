@@ -35,7 +35,7 @@ export async function loadConfig() {
   }
 
   try {
-    const res = await fetch('https://bekxvujhpsygojvvlnxh.supabase.co/functions/v1/widget-config', {
+    const res = await fetch('https://srzyqnvgesamlvkptfvq.supabase.co/functions/v1/widget-config', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ api_key: apiKey }),

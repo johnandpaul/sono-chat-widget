@@ -61,7 +61,7 @@ export function initPhotoUpload(config, shell, sendMessageFn) {
 
     let res;
     try {
-      res = await fetch('https://bekxvujhpsygojvvlnxh.supabase.co/functions/v1/archive-agent', {
+      res = await fetch('https://srzyqnvgesamlvkptfvq.supabase.co/functions/v1/archive-agent', {
         method: 'POST',
         body: formData,
       });

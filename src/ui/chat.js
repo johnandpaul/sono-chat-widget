@@ -59,7 +59,7 @@ export function initChat(config, shell) {
 
     let res;
     try {
-      res = await fetch('https://bekxvujhpsygojvvlnxh.supabase.co/functions/v1/cipher-agent', {
+      res = await fetch('https://srzyqnvgesamlvkptfvq.supabase.co/functions/v1/cipher-agent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
